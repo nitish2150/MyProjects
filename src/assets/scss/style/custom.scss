@@ -1,0 +1,44 @@
+@charset "UTF-8";
+
+
+  .conf-form-padding{
+    padding:10px 40px
+  }
+
+  .display-flex{
+    display: flex !important
+  }
+
+  .cdk-global-overlay-wrapper, .cdk-overlay-container {
+    z-index: 99999 !important;
+ }
+
+
+//== Breadcrumbs
+//
+//##
+
+
+ .breadcrumb {
+  padding: 5px 20px;
+  list-style: none;
+  background-color:transparent;
+  border-radius: 5px;
+  z-index: 9999999;
+
+  > li {
+    display: inline-block;
+
+    + li:before {
+      // [converter] Workaround for https://github.com/sass/libsass/issues/1115
+      $nbsp: "\00a0";
+      content: "/#{$nbsp}"; // Unicode space added since inline-block means non-collapsing white-space
+      padding: 0 15px;
+      color: #c1c2c3;
+    }
+  }
+
+  > .active {
+    color: #000;
+  }
+}

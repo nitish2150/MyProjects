@@ -1,0 +1,89 @@
+<!--<div class="col-md-6 col-md-offset-12">
+   <div> <h2>User Detail</h2></div>
+    <form name="form" ng-submit="vm.userdetail()" role="form">
+        <div ng-controller="UploadController ">
+            <form>-->
+               <!--  <label for="username">User Image</label>
+              <input type="file" ng-file-select="onFileSelect($files)" ng-model="imageSrc"> -->
+              <!--  <input type="file" ng-file-select="onFileSelect($files)" multiple> -->
+           <!--</form>--> 
+            
+            <!--<img ng-src="{{imageSrc}}" />  
+              
+          </div>
+          <br>
+        <div class="form-group" ng-class="{ 'has-error': form.firstName.$dirty && form.firstName.$error.required }">
+            <label for="username">First name</label>
+            <input type="text" name="firstName" id="firstName" placeholder="Enter FirstName Here" class="form-control" ng-model="vm.user.firstName" required />
+            <span ng-show="form.firstName.$dirty && form.firstName.$error.required" class="help-block">First name is required</span>
+        </div>
+        <br>
+        <div class="form-group" ng-class="{ 'has-error': form.lastName.$dirty && form.lastName.$error.required }">
+            <label for="username">Last name</label>
+            <input type="text" name="lastName" id="Text1" placeholder="Enter LastName Here" class="form-control" ng-model="vm.user.lastName" required />
+            <span ng-show="form.lastName.$dirty && form.lastName.$error.required" class="help-block">Last name is required</span>
+        </div> <br>
+        <div class="form-group" ng-class="{ 'has-error': form.address.$dirty && form.address.$error.required }">
+            <label for="address">Address</label>
+            <input type="text" name="address" id="address" placeholder="Enter Address Here" class="form-control" ng-model="vm.user.address" required />
+            <span ng-show="form.address.$dirty && form.address.$error.required" class="help-block">Address is required</span>
+        </div> <br>
+        <div class="form-group" ng-class="{ 'has-error': form.mobile.$dirty && form.mobile.$error.required }">
+            <label for="mobile">Mobile</label>
+            <input type="text" name="mobile" id="mobile" placeholder="Enter Mobile No" class="form-control" ng-model="vm.user.mpbile" required />
+            <span ng-show="form.mobile.$dirty && form.mobile.$error.required" class="help-block">Mobile is required</span>
+        </div> <br>
+        <div class="form-group" ng-class="{ 'has-error': form.gender.$dirty && form.gender.$error.required }">
+            <label for="gender">Gender</label>
+            <input type="text" name="gender" id="gender" placeholder="Enter Gender Here" class="form-control" ng-model="vm.user.gender" required />
+            <span ng-show="form.gender.$dirty && form.gender.$error.required" class="help-block">Gender is required</span>
+        </div> <br>
+        <div class="form-group" ng-class="{ 'has-error': form.age.$dirty && form.age.$error.required }">
+            <label for="age">Age</label>
+            <input type="text" name="age" id="age" placeholder="Enter Age Here" class="form-control" ng-model="vm.user.age" required />
+            <span ng-show="form.age.$dirty && form.age.$error.required" class="help-block">Age is required</span>
+        </div> <br>
+        <div class="form-actions">
+            <button type="submit" ng-disabled="form.$invalid || vm.dataLoading" class="btn btn-primary">Update Detail</button>
+            <a href="#!/login" class="btn btn-link">Cancel</a>
+        </div> <br>
+    </form>
+</div>
+-->
+
+<div class="col-md-8 col-md-offset-12">
+<form name="form" ng-submit="userdetail()" role="form">
+    <div class="container">
+      <h1 class="red-text">User Detail</h1>
+      <hr>
+      <label for="fname"><b>First Name</b></label>
+      <input type="text" placeholder="Enter FirstName" name="fname" required>
+  
+      <label for="lname"><b>Last Name</b></label>
+      <input type="text" placeholder="Enter LastName" name="lname" required>
+  
+      <label for="address"><b>Address</b></label>
+      <input type="text" placeholder="Address" name="Address" required>
+
+      <label for="mobile"><b>Mobile</b></label>
+      <input type="text" placeholder="Enter Mobile No" name="mobile" required>
+
+      <label for="gender"><b>Gender</b></label>
+      <input type="text" placeholder="Gender" name="gender" required>
+
+      <label for="age"><b>Age</b></label>
+      <input type="text" placeholder="Age" name="age" required>
+
+      <label for="username">User Image</label>
+      <!--<input type="file" ng-file-select="onFileSelect($files)" ng-model="imageSrc"> --> 
+      <input type="file" ng-file-select="onFileSelect($files)" multiple>
+      <hr>
+      <!--<p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
+        -->
+      <button type="submit" class="updatebtn">Update Detail</button>
+    </div>
+    
+  </form>
+</div>
+ 
+  

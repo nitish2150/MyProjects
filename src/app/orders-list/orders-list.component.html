@@ -1,0 +1,77 @@
+<div><ng4-loading-spinner> </ng4-loading-spinner></div>
+<div class="main-content" style="margin-top: 20px;">
+    <ul class="breadcrumb">
+        <li outerLinkActive="active">
+            <a routerLink="/dashboard">Dashboard</a>
+        </li>
+        <li class="active">Orders</li>
+    </ul>
+  <div class="container-fluid">
+
+        <div class="row">
+                <mat-form-field  class="search-filter-txt">
+                    <input matInput id="searchText" placeholder="Search order by transaction no or status">
+                </mat-form-field>
+                <button type="button"  class="btn btn-info filter-btn" (click)="applyFilter()">
+                    Search
+                </button>
+                <button type="button"  class="btn btn-secondary filter-btn" (click)="resetFilter()">
+                        Reset
+                </button>
+            </div>
+
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card">
+                  <div class="card-header card-header-danger">
+                      <h4 class="card-title ">Orders</h4>
+                  <!--    <p class="card-category"> Here is a subtitle for this table</p>  -->
+                  </div>
+                  <div class="card-body">
+                      <div class="table-responsive">
+                          <table class="table">
+                              <thead class=" text-primary">
+                                <tr>	                    
+                                    <th>Id</th>
+                                    <th>Payment Status</th>  
+                                    <th>Transaction No</th>
+                                    <th>Order Status</th>
+                                    <th>Total Amount</th>	  
+                                    <th>Order Date</th>        
+                                    <th>Action</th>             
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr *ngFor="let item of orders | paginate: { id: 'listing_pagination',
+                                itemsPerPage: 10,
+                                currentPage: page,
+                                totalItems: totalRec }">
+                                    <td>{{item.orderId || ' - '}}</td>
+                                    <td>{{item.paymentStatus || ' - '}}</td>  
+                                    <td>{{item.transactionNum || ' - '}}</td>  
+                                    <td>{{item.orderStatus || ' - '}}</td>
+                                    <td>{{item.totalAmount || ' - '}}</td>
+                                    <td>{{(item.orderDate  | date: 'dd-MMM-yyyy hh:mm a' )|| ' - '}}</td>
+                                    <td class="td-actions text-center">
+                                        <button mat-raised-button type="button" matTooltip="View" [matTooltipPosition]="'above'" class="btn btn-primary btn-link btn-sm btn-just-icon" (click)="getOrderDetails(item.orderId);">
+                                            <i class="material-icons"> visibility</i>                                    
+                                        </button>
+                                    </td>
+                            </tr>
+                              </tbody>
+                          </table>
+                          <div>
+                            <pagination-controls  id="listing_pagination" maxSize="10" directionLinks="true" (pageChange)="page = $event"
+                            autoHide="true"
+                            responsive="true"
+                            previousLabel=""
+                            nextLabel=""
+                            style="text-align: right;"></pagination-controls>
+                        </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

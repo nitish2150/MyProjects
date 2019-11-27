@@ -1,0 +1,207 @@
+<div><ng4-loading-spinner> </ng4-loading-spinner></div>
+<div class="main-content" style="margin-top: 20px;">
+        <ul class="breadcrumb">
+            <li outerLinkActive="active">
+                <a routerLink="/dashboard">Dashboard</a>
+            </li>
+            <li class="active">Products</li>
+        </ul>
+  <div class="container-fluid">
+    <div class="row">
+        <mat-form-field  class="search-filter-txt">
+            <input matInput id="searchText" placeholder="Search product by name or category">
+        </mat-form-field>
+        <button type="button"  class="btn btn-info filter-btn" (click)="applyFilter()">
+            Search
+        </button>
+        <button type="button"  class="btn btn-secondary filter-btn" (click)="resetFilter()">
+                Reset
+        </button>
+    </div>  
+    <div class="row">
+          <div class="col-md-12">
+              <div class="card">
+                  <div class="card-header card-header-danger">
+                      <h4 class="card-title ">Products</h4>
+                      <button mat-raised-button type="button" class="btn btn-secondary btn-secondary-override" data-backdrop="static"  (click)="this.showModal('new', null)">
+                            Add New
+                      </button>
+                 <!--     <p class="card-category"> Here is a subtitle for this table</p>  -->
+                  </div>
+                  <div class="card-body">
+                      <div class="table-responsive">
+                          <table class="table">
+                              <thead class=" text-primary">
+                                <tr>	                    
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                   <!-- <th>Image Name</th>  -->
+                                    <th>Image</th>
+                                    <th>Category</th>
+                                    <th>Weight Price</th>
+                                    <th>Actions</th>	                    
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr *ngFor="let item of products | paginate: { id: 'listing_pagination',
+                                itemsPerPage: 10,
+                                currentPage: page,
+                                totalItems: totalRec }">
+                                        <td>{{item.p_id || ' - '}}</td>
+                                        <td>{{item.productName || ' - '}}</td>
+                                     <!--   <td>{{item.imageName || ' - '}}</td>  -->
+                                     <td><img src="{{imageUrlFormater(item.imagePath)}}" height="100" width="100"></td>
+                                        <td>{{item.category || ' - '}}</td>  
+                                       <td><a (click)="showWeightPriceModal(item)" class="btn-link btn-link-override"> Click Here </a></td>
+                                        <td class="td-actions text-center">
+                                            <button mat-raised-button type="button" (click)="showModal('edit', item)" class="btn btn-primary btn-link btn-sm btn-just-icon">
+                                                <i class="material-icons">edit</i>
+                                            </button>
+                                            <button mat-raised-button type="button"  class="btn btn-danger btn-link btn-sm btn-just-icon"
+                                                mwlConfirmationPopover
+                                            [popoverTitle]= "popoverTitle"
+                                            [popoverMessage]="popoverMessage"
+                                            placement="left"
+                                            (confirm)="deleteProduct(item.p_id)"
+                                            (cancle)="cancleClicked = true">
+                                            <i class="material-icons">close</i>
+                                            </button>
+                                        </td>
+                                </tr>
+                             </tbody>
+                          </table>
+                          <div>
+                            <pagination-controls  id="listing_pagination" maxSize="10" directionLinks="true" (pageChange)="page = $event"
+                            autoHide="true"
+                            responsive="true"
+                            previousLabel=""
+                            nextLabel=""
+                            style="text-align: right;"></pagination-controls>
+                        </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+<!-- Add-product-Modal-angular -->
+<div bsModal #addProductModal id="addProductModal" class="modal modal-angular fade" [config]="{backdrop: 'static'}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <button type="button" class="close" (click)="hideModal()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="margin-top">
+                        Add New Product
+                    </h4>
+                    <div class="separator"></div>
+                    
+                    <form [formGroup]="productForm" class="form-validate form-horizontal" (submit)="submitForm($event)" novalidate="" role="form">
+                        <div class="block-center conf-form-padding">
+                          <mat-form-field>
+                                <input matInput placeholder="Enter product name" [formControl]="nameControl" required>
+                                <mat-error *ngIf="nameControl.invalid">This field is required</mat-error>
+                            </mat-form-field>
+                            <mat-form-field>
+                                <input matInput placeholder="Enter product code" [formControl]="codeControl">
+                            </mat-form-field>
+                            <mat-form-field>
+                                <mat-select [formControl]="categoryControl" placeholder="Please select category *">
+                                    <mat-option *ngFor="let category of categories; let i = index" [value]="category.id">
+                                        {{category.name}}
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="categoryControl.invalid">This field is required</mat-error>
+                            </mat-form-field>
+                            <div *ngIf="mode==='new'">
+                                <div align="left">Upload Product Image: </div><br />
+                                <div class="example-container">
+                                    <div class="user-block-picture">
+                                        <label for="fileInput" class="file-upload">                                      
+                                            <input type="file" name="fileInput" (change)="onFileChange($event)" ng-model="imageSrc"/>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <br />
+                            <h3 align="left">  Add Weight & Price : </h3>
+                            <div align="left">
+                                    <input matInput id="weight" placeholder="Product weight" style="width:160px;border-bottom: 1px solid #000;">
+                                    <input matInput id="price" placeholder="Product Price" style="width:160px;margin-left:26px;border-bottom: 1px solid #000;">
+                                    <button  type="button" mat-icon-button (click)="updateWeightage()">
+                                            <i class="material-icons">add_circle</i>                                            
+                                    </button>
+                            </div>
+                            <div align="center">
+                                    <table class="table" style="border:1px solid grey; margin: 10px 0 0 0;">
+                                        <thead class=" text-primary">
+                                            <tr>	                    
+                                                <th>Weight</th>
+                                                <th>Price</th>
+                                                <th></th>	                    
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let item of weightPrice">
+                                                    <td>{{item.weight}}</td>
+                                                    <td>{{item.price}}</td>
+                                                    <td class="td-actions text-center">
+                                                        <button mat-raised-button type="button" matTooltip="Remove" (click)="removeWeigtage(item.weight)" [matTooltipPosition]="'above'" class="btn btn-danger btn-link btn-sm btn-just-icon">
+                                                            <i class="material-icons">close</i>
+                                                        </button>
+                                                    </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn btn-info" type="submit" *ngIf="mode==='new'">Save</button>
+                            <button class="btn btn-info" type="button" *ngIf="mode==='edit'" (click)="updateProduct()">Update</button>
+                            <button class="btn" type="button" aria-label="Close" (click)="hideModal()">Close</button>
+                        </div>
+                    </form>                    
+                </div>
+            </div>
+        </div>    
+    </div>
+
+    <!-- show weightPrice-Modal-angular -->
+<div class="modal modal-angular fade" id="weight-price" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="margin-top">
+                   Weight & Price
+                </h4>
+                <div class="separator"></div>
+
+                <div align="center">
+                    <table class="table" style="border:1px solid grey; margin: 10px 0 0 0;">
+                        <thead class=" text-primary">
+                            <tr>	                    
+                                <th>Weight</th>
+                                <th>Price</th>               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of weightPrice">
+                                    <td>{{item.weight}}</td>
+                                    <td>{{item.price}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+            </div>
+
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+                    Close
+                </button>
+                
+            </div>
+        </div>
+    </div>    
+</div>

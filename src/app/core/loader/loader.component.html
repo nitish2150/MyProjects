@@ -1,0 +1,19 @@
+<!-- <div [class.loader-hidden]="!show">
+    <div class="loader-overlay">
+            <div>
+                <md-progress-bar mode="indeterminate" *ngIf="show"></md-progress-bar>
+                <ngb-progressbar showValue="true" type="success" *ngIf="show"></ngb-progressbar>
+
+                <div class="spinner">
+                    <div class="loader"></div>
+                </div> 
+
+            </div>
+    </div>
+</div> -->
+<div class="loader-overlay">
+    <div class="spinner" (*ngIf)="show">
+        <div class="loader"></div>
+    </div>
+</div>
+ 

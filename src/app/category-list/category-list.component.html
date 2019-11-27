@@ -1,0 +1,103 @@
+<div><ng4-loading-spinner> </ng4-loading-spinner></div>
+<div class="main-content" style="margin-top: 25px;">
+    <ul class="breadcrumb">
+        <li outerLinkActive="active">
+            <a routerLink="/dashboard">Dashboard</a>
+        </li>
+        <li class="active">Category List</li>
+    </ul>
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card">
+                  <div class="card-header card-header-danger">
+                      <h4 class="card-title">Categories</h4>
+                      <button mat-raised-button type="button" class="btn btn-secondary btn-secondary-override" data-backdrop="static" data-toggle="modal" data-target="#add-category">
+                        Add New
+                      </button>
+                  <!--    <p class="card-category"> Here is a subtitle for this table</p>  -->
+                  </div>
+                  <div class="card-body">
+                      <div class="table-responsive">
+                            <table class="table">
+                                    <thead class=" text-primary">
+                                        <tr>	                    
+                                            <th>Id</th>
+                                            <th>Name</th>
+                                            <th>Image Name</th>
+                                            <th>Image</th>
+                                            <th>Actions</th>	                    
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of categories | paginate: { id: 'listing_pagination',
+                                        itemsPerPage: 10,
+                                        currentPage: page,
+                                        totalItems: totalRec }">
+                                                <td>{{item.id || ' - '}}</td>
+                                                <td>{{item.name || ' - '}}</td>
+                                                <td>{{item.imageName || ' - '}}</td>
+                                                <td><img src="{{imageUrlFormater(item.imagePath)}}" height="100" width="100"></td>
+                                                <td class="td-actions text-center">
+                                                    <button mat-raised-button type="button" matTooltip="Edit Task" [matTooltipPosition]="'above'" class="btn btn-primary btn-link btn-sm btn-just-icon">
+                                                        <i class="material-icons">edit</i>
+                                                    </button>
+                                                    <button mat-raised-button type="button" matTooltip="Remove" [matTooltipPosition]="'above'" class="btn btn-danger btn-link btn-sm btn-just-icon">
+                                                        <i class="material-icons">close</i>
+                                                    </button>
+                                                </td>
+                                        </tr>
+                                     </tbody>
+                            </table>   
+                            <div>
+                                <pagination-controls  id="listing_pagination" maxSize="10" directionLinks="true" (pageChange)="page = $event"
+                                autoHide="true"
+                                responsive="true"
+                                previousLabel=""
+                                nextLabel=""
+                                style="text-align: right;"></pagination-controls>
+                            </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+<!-- Add-category-Modal-angular -->
+<div class="modal modal-angular fade" id="add-category" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="margin-top">
+                    Add New Category
+                </h4>
+                <div class="separator"></div>
+
+                <form [formGroup]="categoryForm" class="form-validate form-horizontal" (submit)="submitForm($event)" novalidate="" role="form">
+                    <div class="block-center conf-form-padding">
+                      <mat-form-field>
+                            <input matInput placeholder="Enter category name" [formControl]="nameControl" required>
+                            <mat-error *ngIf="nameControl.invalid">This field is required</mat-error>
+                        </mat-form-field>
+                        <div align="left">Upload Product Image: </div><br />
+                        <div class="example-container">
+                            <div class="user-block-picture">
+                                <label for="fileInput" class="file-upload">                                      
+                                    <input type="file" name="fileInput" (change)="onFileChange($event)" ng-model="imageSrc"/>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn btn-info" type="submit">Save</button>
+                        <button class="btn" type="button" aria-label="Close" (click)="hideModal()">Close</button>
+                    </div>
+                </form>                   
+            </div>
+        </div>
+    </div>    
+</div>

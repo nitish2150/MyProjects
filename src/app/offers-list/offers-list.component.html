@@ -1,0 +1,172 @@
+<div><ng4-loading-spinner> </ng4-loading-spinner></div>
+<div class="main-content" style="margin-top: 20px;">
+    <ul class="breadcrumb">
+        <li outerLinkActive="active">
+            <a routerLink="/dashboard">Dashboard</a>
+        </li>
+        <li class="active">Offers</li>
+    </ul>
+  <div class="container-fluid">
+        <div class="row">
+                <mat-form-field  class="search-filter-txt">
+                    <input matInput id="searchText" placeholder="Search offer by type or code">
+                </mat-form-field>
+                <button type="button"  class="btn btn-info filter-btn" (click)="applyFilter()">
+                    Search
+                </button>
+                <button type="button"  class="btn btn-secondary filter-btn" (click)="resetFilter()">
+                        Reset
+                </button>
+            </div> 
+
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card">
+                  <div class="card-header card-header-danger">
+                      <h4 class="card-title ">Offers</h4>
+                      <button mat-raised-button type="button" class="btn btn-secondary btn-secondary-override" data-toggle="modal" data-backdrop="static" (click)="this.showModal('new', null)">
+                            Add New
+                          </button>
+                    <!--  <p class="card-category"> Here is a subtitle for this table</p> -->
+                  </div>
+                  <div class="card-body">
+                      <div class="table-responsive">
+                          <table class="table">
+                              <thead class=" text-primary">
+                                <tr>	                    
+                                    <th>Id</th>
+                                    <th>Offer value</th>
+                                    <th>Offer Type</th>  
+                                    <th>Offer Desc</th>
+                                    <th>Image</th>
+                                    <th>Offer Code</th>
+                                    <th>Valid From</th>
+                                    <th>Valid To</th>
+                                    <th>Actions</th>	                    
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr *ngFor="let item of offers | paginate: { id: 'listing_pagination',
+                                itemsPerPage: 10,
+                                currentPage: page,
+                                totalItems: totalRec }">
+                                    <td>{{item.o_id || ' - '}}</td>
+                                    <td>{{item.offerValue || ' - '}}</td>
+                                   <td>{{item.offerType || ' - '}}</td>  
+                                   <td>{{item.offerDesc || ' - '}}</td>                          
+                                  <!--  <td><img src="http://3.13.212.113:3000{{item.imagePath}}" height="100" width="100"></td> -->  
+                                    <td><img src="{{imageUrlFormater(item.imagePath)}}" height="50" width="50"></td>
+                                    <td>{{item.offerCode || ' - '}}</td>  
+                                    <td>{{dateFormatter(item.offerValidFrom, null) || ' - '}}</td>
+                                    <td>{{dateFormatter(item.offerValidTo, null) || ' - '}}</td>
+                                    <td class="td-actions text-center">
+                                        <button mat-raised-button type="button" (click)="showModal('edit', item)" class="btn btn-primary btn-link btn-sm btn-just-icon">
+                                            <i class="material-icons">edit</i>
+                                        </button>
+                                        <button mat-raised-button type="button"  class="btn btn-danger btn-link btn-sm btn-just-icon"
+                                            mwlConfirmationPopover
+                                            [popoverTitle]= "popoverTitle"
+                                            [popoverMessage]="popoverMessage"
+                                            placement="left"
+                                            (confirm)="deleteOffer(item.o_id)"
+                                            (cancle)="cancleClicked = true">
+                                        <i class="material-icons">close</i>
+                                    </button>
+                                    </td>
+                            </tr>
+                              </tbody>
+                          </table>
+                          <div>
+                            <pagination-controls  id="listing_pagination" maxSize="10" directionLinks="true" (pageChange)="page = $event"
+                            autoHide="true"
+                            responsive="true"
+                            previousLabel=""
+                            nextLabel=""
+                            style="text-align: right;"></pagination-controls>
+                        </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+<!-- Add-offer-Modal-angular -->
+<div bsModal #addOffer id="addOffer" class="modal modal-angular fade" [config]="{backdrop: 'static'}" tabindex="-1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <button type="button" class="close" (click)="hideModal()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="margin-top">
+                        Add New Offer
+                    </h4>
+                    <div class="separator"></div>
+                    
+                    <form [formGroup]="offerForm" class="form-validate form-horizontal" (submit)="submitForm($event)" novalidate="" role="form">
+                            <div class="block-center conf-form-padding">
+                             <mat-form-field >
+                                  <!--  <input *ngIf="mode==='edit'" mat-input [formControl]="typeControl" [readonly]="true">-->
+                                <mat-select  id="statusId" [disabled]="mode==='edit'" mat-input  [formControl]="typeControl"  placeholder="Please select offerType *"  (selectionChange)="selectOfferType($event.value)">   <!--(selectionChange)="selectStatus($event.value)"-->
+                                    <mat-option value="flat">FLAT </mat-option>
+                                    <mat-option value="percent">PERCENT </mat-option>
+                                    <mat-option value="points">POINTS </mat-option>
+                                </mat-select>                                    
+                                <mat-error *ngIf="typeControl.invalid">This field is required</mat-error>
+                             </mat-form-field>
+    
+                             <mat-form-field>
+                                <input matInput placeholder="Enter offer description" [formControl]="descControl" required>
+                                <mat-error *ngIf="descControl.invalid">This field is required</mat-error>
+                             </mat-form-field>
+    
+                             <mat-form-field>
+                                <input matInput placeholder="Enter offer code" [formControl]="codeControl" required>
+                                <mat-error *ngIf="codeControl.invalid">This field is required</mat-error>
+                             </mat-form-field>
+                             <mat-form-field *ngIf="!isPoint">
+                                <input type="number" matInput placeholder="Enter offer value" [formControl]="valueControl" required>
+                                <mat-error *ngIf="valueControl.invalid">This field is required</mat-error>
+                            </mat-form-field>
+    
+                            <mat-form-field>
+                                <input matInput [matDatepicker]="picker" [formControl]="validFromControl" placeholder="Offer valid from *">
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                                <mat-error *ngIf="validFromControl.invalid">This field is required</mat-error>
+                            </mat-form-field>
+    
+                            <mat-form-field>
+                                <input matInput [matDatepicker]="toPicker" [formControl]="validToControl" placeholder="Offer valid to *">
+                                <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #toPicker></mat-datepicker>
+                                <mat-error *ngIf="validToControl.invalid">This field is required</mat-error>
+                            </mat-form-field>
+    
+                             <mat-form-field *ngIf="isPoint">
+                                <input type="number" matInput placeholder="Enter offer point" [formControl]="pointControl" required>                                
+                                <mat-error *ngIf="pointControl.invalid">This field is required</mat-error>
+                             </mat-form-field>
+                             <div *ngIf="mode==='new'">
+                             <div align="left">Upload Offer Image: </div><br />
+                             <div class="example-container">
+                                    <div class="user-block-picture">
+                                        <label for="fileInput" class="file-upload">                                      
+                                            <input type="file" name="fileInput" (change)="onFileChange($event)" ng-model="imageSrc" #inputFile/>
+                                        </label>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="btn btn-info" type="submit" *ngIf="mode==='new'">Save</button>
+                                <button class="btn btn-info" type="button" *ngIf="mode==='edit'" (click)="updateOffer()">Update</button>
+                             <button class="btn" type="button" aria-label="Close" (click)="hideModal()">Close</button>
+                            </div>
+                        </form>    
+
+                </div>
+            </div>
+        </div>    
+    </div>

@@ -1,0 +1,108 @@
+<div><ng4-loading-spinner> </ng4-loading-spinner></div>
+<div class="main-content">
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                   <div class="card-header card-header-warning card-header-icon" style="padding-bottom: 20px" >
+                        <div class="card-icon">
+                                <i class="fa fa-list-alt" ></i>
+                        </div>
+                        <p class="card-category">Categories</p>
+                        <h3 class="card-title">{{categoryCount}}</h3> 
+                    </div>            
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                  <div class="card-header card-header-success card-header-icon" style="padding-bottom: 20px">
+                      <div class="card-icon">                    
+                          <i class="fa fa-product-hunt" ></i>
+                      </div>
+                      <p class="card-category">Products</p>
+                      <h3 class="card-title">{{productCount}}</h3> 
+                  </div>
+                  
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                  <div class="card-header card-header-danger card-header-icon" style="padding-bottom: 20px">
+                      <div class="card-icon">                  
+                       <i class="fa fa-gift" ></i>
+                      </div>
+                      <p class="card-category">Offers</p>
+                     <h3 class="card-title">{{offerCount}}</h3> 
+                  </div>
+                
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                  <div class="card-header card-header-info card-header-icon" style="padding-bottom: 20px">
+                      <div class="card-icon">                    
+                          <i class="fa fa-shopping-cart" ></i>
+                      </div>
+                      <p class="card-category">Pedning Orders</p>
+                      <h3 class="card-title">{{orderCount}}</h3> 
+                  </div>
+              
+              </div>
+          </div>
+      </div>
+     
+          <div class="row">
+              <div class="col-md-12">
+              <div class="card"  style="padding-bottom: 40px">
+                  <div class="card-header card-header-danger">
+                      <h2 class="card-title">Orders</h2>
+                      <p class="card-title">New Order on {{dateFormatter()}}</p>
+                  </div>
+                   <div class="card-body table-responsive">
+                      <table class="table table-hover">
+                          <thead class="text-warning">
+                            <tr>	                    
+                                <th>Id</th>
+                                <th>Payment Status</th>  
+                                <th>Transaction No</th>
+                                <th>Order Status</th>
+                                <th>Total Amount</th>	  
+                                <th>Order Date</th>        
+                                <th>Action</th>             
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let item of orders  | paginate: { id: 'order_list_pagination',
+                            itemsPerPage: 20,
+                            currentPage: page,
+                            totalItems: pendingOrdersCount }">
+                                <td>{{item.orderId || ' - '}}</td>
+                                <td>{{item.paymentStatus || ' - '}}</td> 
+                                <td>{{item.transactionNum || ' - '}}</td>  
+                                <td>{{item.orderStatus || ' - '}}</td>
+                                <td>{{item.totalAmount || ' - '}}</td>
+                                <td>{{(item.orderDate | date: 'dd-MMM-yyyy hh:mm a') || ' - '}}</td>
+                                <td class="td-actions text-center">
+                                    <button mat-raised-button type="button" matTooltip="View" [matTooltipPosition]="'above'" class="btn btn-primary btn-link btn-sm btn-just-icon" (click)="getOrderDetails(item.orderId);">
+                                     <i class="material-icons"> visibility</i>                                    
+                                      </button>
+                                </td>
+                            </tr>
+                          </tbody>
+                      </table>
+                      <div>
+                        <pagination-controls  id="order_list_pagination" maxSize="20" directionLinks="true" (pageChange)="page = $event"
+                            autoHide="true"
+                            responsive="true"
+                            previousLabel=""
+                            nextLabel=""
+                            style="text-align: right;"></pagination-controls>
+                        </div>
+                  </div> 
+              </div>
+              </div>
+
+          </div>
+     
+  </div>
+</div>

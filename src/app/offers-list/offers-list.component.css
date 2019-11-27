@@ -1,0 +1,14 @@
+.btn-secondary-override{
+    float: right !important;
+    margin-top: -29px !important;
+}
+
+.search-filter-txt{
+    width: 300px;
+    margin-left:20px;
+}
+
+.filter-btn{
+    height: 40px;
+    margin: 10px;
+}

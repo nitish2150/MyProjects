@@ -1,0 +1,32 @@
+.table th, .table td {
+    
+border: 1px solid rgba(0, 0, 0, 0.06) !important;
+
+}
+
+
+
+.highlight{
+
+  font-weight: 600;
+}
+
+.Back{
+  float: left !important;
+  margin-top: -29px !important;
+}
+
+.spacingCls{
+  margin: 20px 0;
+}
+.separator{
+  border-bottom: 1px solid rgba(220,220,220, .2);
+  width: 100%;
+  display: block;
+  margin: 11px 0;
+}
+
+.btn-secondary-override{
+  float: right !important;
+  margin-top: -29px !important;
+}

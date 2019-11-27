@@ -1,0 +1,141 @@
+<!-- <div>
+    <button type="button" class="btn btn-primary" (click)="goBack()"> << Back</button>
+</div> -->
+<div><ng4-loading-spinner> </ng4-loading-spinner></div>
+<div class="main-content" style="margin-top: 20px;">
+    <ul class="breadcrumb">
+        <li outerLinkActive="active">
+            <a routerLink="/dashboard">Dashboard</a>
+        </li>
+        <li outerLinkActive="active">
+            <a routerLink="/orders-list">Order List</a>
+        </li>
+        <li class="active">Order Details</li>
+    </ul>
+    <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-12">
+              <div class="card">
+                  <div class="card-header card-header-danger">
+                      <h4 class="card-title ">Orders Detail</h4>
+                      <button mat-raised-button type="button" *ngIf="isShow" class="btn btn-secondary btn-secondary-override" data-toggle="modal" data-backdrop="static" data-target="#change-status">
+                        Change Status
+                      </button>
+                  </div>
+                  <div class="card-body">
+                      <div class="table-responsive">
+                           
+                            <div class="row spacingCls">
+                                <div class="col-md-4">                               
+                                    <span class="highlight">Order Id :-</span> {{orderDetails && orderDetails.orderId}}
+                                </div>
+                                
+                                <div class="col-md-4"> 
+                                    <span class="highlight">Order Status :-</span>  {{orderDetails && orderDetails.orderStatus}}                               
+                                </div>
+
+                                <div class="col-md-4">
+                                        <span class="highlight">Order Date:-</span>  {{(orderDetails && orderDetails.orderDate | date: 'dd-MMM-yyyy hh:mm a')}}                                   
+                                </div>
+                           </div>
+
+                           <div class="row spacingCls">
+                                <div class="col-md-4">
+                                        <span class="highlight">User Name:-</span>  {{orderDetails && orderDetails.userName}}
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <span class="highlight">Transaction Num :-</span>  {{orderDetails && orderDetails.transactionNum}}
+                                </div>
+    
+                                <div class="col-md-4">
+                                    <span class="highlight">Payment Date:-</span> {{(orderDetails && orderDetails.paymentDate | date: 'dd-MMM-yyyy hh:mm a') || ' '}}
+                                </div>
+                            </div>
+
+                            <div class="row spacingCls">
+                                    <div class="col-md-4">
+                                             <span class="highlight">Payment Mode :-</span>  {{orderDetails && orderDetails.paymentMode}}                                
+                                    </div>
+                                    
+                                    <div class="col-md-4">                                    
+                                        <span class="highlight">Payment Status :-</span> {{orderDetails && orderDetails.paymentStatus}}
+                                    </div>
+        
+                                    <div class="col-md-4">
+                                        <span class="highlight">Total Amount:- </span> {{orderDetails && orderDetails.totalAmount}}                                    
+                                    </div>    
+                            </div>
+
+                            <div class="row spacingCls">
+                                    <div class="col-md-8">
+                                        <span class="highlight">Delivery Address:-</span>{{address}}
+                                    </div>    
+                            </div>
+                        <div class="separator"></div>
+                          <h4 align="left" ><span class="highlight" > Ordered Items</span></h4>
+                          <table class="table">
+                            <thead class=" text-primary">
+                              <tr>	                    
+                                <th>Product Name</th>
+                                <th>Price</th>                                    
+                                <th>weight</th>
+                                <th>Name On Cake</th>
+                                <th>Delivery Date</th>	   
+                                <th>Quantity</th>	
+                                <th>Image</th>       
+                                <th>Occasion</th>                     
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let item of orderProducts">
+                                      <td>{{item.productName || ' - '}}</td>
+                                      <td>{{item.price || ' - '}}</td>
+                                      <td>{{item.weight || ' - '}}</td>
+                                      <td>{{item.nameOnCacke || ' - '}}</td>
+                                      <td>{{item.deliveryDate !== 'Invalid date' ? (item.deliveryDate | date: 'dd-MMM-yyyy hh:mm a') : ''}}</td>
+                                      <td>{{item.quantity || ' - '}}</td>
+                                      <td><img src="{{imageUrlFormater(item.imagePath)}}" height="100" width="100"></td>
+                                      <td>{{item.occasion || ' - '}}</td>  
+                                      
+                              </tr>
+                           </tbody>
+                        </table>                                        
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+<!--Change-Status-Modal-angular -->
+<div class="modal modal-angular fade" id="change-status" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="margin-top">
+                    Change Status
+                </h4>
+                
+                <div class="separator"></div>
+                <div align="center">
+                    <mat-form-field style="width:200px;" >
+                        <mat-label >Select your Status</mat-label>
+                        <mat-select id="statusId" placeholder="Please select category *" (selectionChange)="selectStatus($event.value)" style="width:200px;" >
+                            <mat-option value="INPROGRESS">IN PROGRESS</mat-option>
+                            <mat-option value="CANCELED">CANCELED</mat-option>
+                            <mat-option value="DELIVERED">DELIVERED</mat-option>
+                        </mat-select>
+
+                    </mat-form-field>
+                  </div>
+                  <div>
+                  <button class="btn btn-info" type="button" (click)="updateStatus()">Update</button>
+               
+                <button class="btn" type="button" aria-label="Close" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>    
+</div>
